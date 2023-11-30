@@ -3,6 +3,7 @@ package org.example.service.impl;
 import org.example.model.PokerHand;
 import org.example.service.CombinationsDefinable;
 
+
 public class Trips implements CombinationsDefinable {
 
     @Override

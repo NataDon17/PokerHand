@@ -10,15 +10,17 @@ public interface ConstantMethods {
             case "T" -> 10;
             default -> Integer.parseInt(cardValue);
 
+//            default -> {
 //                try {
 //                    int parsedValue = Integer.parseInt(cardValue);
-//
 //                    if (parsedValue < 2 || parsedValue > 9) {
 //                        System.out.println("Значение должно быть от 2 до 9 ");
 //                    }
 //                } catch (NumberFormatException e) {
 //                    System.out.println("Неверный формат числа");
 //                }
+//
+//            };
         };
     }
 

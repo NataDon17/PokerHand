@@ -8,6 +8,7 @@ public class FullHouse implements CombinationsDefinable{
     private Pair pair;
     private Trips trips;
 
+
     @Override
     public boolean hasCombination(PokerHand hand) {
         return pair.hasCombination(hand) && trips.hasCombination(hand);

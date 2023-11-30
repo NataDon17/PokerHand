@@ -7,7 +7,7 @@ import org.example.service.CombinationsDefinable;
 import java.util.Comparator;
 import java.util.Optional;
 
-public class HighestCard implements CombinationsDefinable, ConstantMethods {
+public class HighestCard implements CombinationsDefinable {
     @Override
     public boolean hasCombination(PokerHand hand) {
         Optional<String> highestCard = hand.getCards().stream()

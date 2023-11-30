@@ -8,7 +8,6 @@ import java.util.stream.Collectors;
 
 public interface CombinationsDefinable {
     boolean hasCombination(PokerHand hand);
-
     default Map<String, Long> cardCountMap(PokerHand hand) {
         List<String> cards = hand.getCards();
         return cards.stream()
