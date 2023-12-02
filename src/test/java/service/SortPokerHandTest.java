@@ -36,14 +36,16 @@ public class SortPokerHandTest {
 
         for (PokerHand hand : resultHands) {
             PokerHand expectedHand = expectedHands.get(resultHands.indexOf(hand));
-            assertNotEquals(ScorePokerHands.getRankPokerHand(hand), ScorePokerHands.getRankPokerHand(expectedHand));
+            assertNotEquals(ScorePokerHands.getRankPokerHand(hand.getCards()),
+                    ScorePokerHands.getRankPokerHand(expectedHand.getCards()));
         }
 
         Collections.sort(resultHands);
 
         for (PokerHand hand : resultHands) {
             PokerHand expectedHand = expectedHands.get(resultHands.indexOf(hand));
-            assertEquals(ScorePokerHands.getRankPokerHand(hand), ScorePokerHands.getRankPokerHand(expectedHand));
+            assertEquals(ScorePokerHands.getRankPokerHand(hand.getCards()),
+                    ScorePokerHands.getRankPokerHand(expectedHand.getCards()));
         }
     }
 }

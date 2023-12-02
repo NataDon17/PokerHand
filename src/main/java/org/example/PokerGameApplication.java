@@ -4,7 +4,7 @@ import org.example.model.PokerHand;
 
 import java.util.*;
 
-public class PokerGame {
+public class PokerGameApplication {
     public static void main(String[] args) {
 
         ArrayList<PokerHand> hands = new ArrayList<>();
