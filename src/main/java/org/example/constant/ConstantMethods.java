@@ -9,28 +9,16 @@ public interface ConstantMethods {
             case "J" -> 11;
             case "T" -> 10;
             default -> Integer.parseInt(cardValue);
-
-//            default -> {
-//                try {
-//                    int parsedValue = Integer.parseInt(cardValue);
-//                    if (parsedValue < 2 || parsedValue > 9) {
-//                        System.out.println("Значение должно быть от 2 до 9 ");
-//                    }
-//                } catch (NumberFormatException e) {
-//                    System.out.println("Неверный формат числа");
-//                }
-//
-//            };
         };
     }
 
-    static int getCardSuit(String cardSuit) {
+    static String getCardSuit(String cardSuit) {
         return switch (cardSuit) {
-            case "C" -> 1;
-            case "D" -> 2;
-            case "H" -> 3;
-            case "S" -> 4;
-            default -> throw new IllegalArgumentException("Недопустимая масть карты: " + cardSuit);
+            case "H" -> "HEARTS";
+            case "D" -> "DIAMONDS";
+            case "C" -> "CLUBS";
+            case "S" -> "SPADES";
+            default -> throw new NumberFormatException("Invalid card suit: " + cardSuit);
         };
     }
 }
