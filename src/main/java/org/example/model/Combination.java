@@ -1,8 +1,5 @@
 package org.example.model;
 
-import lombok.Getter;
-
-@Getter
 public enum Combination {
     HIGHEST_CARD(1),
     PAIR(2),
@@ -18,5 +15,9 @@ public enum Combination {
 
     Combination(int rank) {
         this.rank = rank;
+    }
+
+    public int getRank() {
+        return rank;
     }
 }
