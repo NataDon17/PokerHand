@@ -1,6 +1,6 @@
 package org.example.definition;
 
-import org.example.model.Combination;
+import org.example.model.enumshand.Combination;
 import org.example.service.CombinationsDefinable;
 import org.example.service.impl.*;
 
@@ -19,16 +19,14 @@ public class ScorePokerHands {
         combinationMap.put(Combination.TRIPS, new TripsDefinitionService());
         combinationMap.put(Combination.TWO_PAIR, new TwoPairsDefinitionService());
         combinationMap.put(Combination.PAIR, new PairDefinitionService());
-        combinationMap.put(Combination.HIGHEST_CARD, new HighestCardDefinitionService());
     }
 
     public static Combination getRankPokerHand(List<String> cards) {
-        for (Map.Entry<Combination, CombinationsDefinable> entry : initializeDefinition.entrySet()) {
-            if (entry.getValue().hasCombination(cards)) {
-                return entry.getKey();
-            }
-        }
-        return Combination.NON_COMBINATION;
+        return initializeDefinition.entrySet().stream()
+                .filter(entry -> entry.getValue().hasCombination(cards))
+                .map(Map.Entry::getKey)
+                .findFirst()
+                .orElse(Combination.HIGHEST_CARD);
     }
 }
 

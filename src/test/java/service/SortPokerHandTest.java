@@ -1,19 +1,27 @@
 package service;
 
 import org.example.definition.ScorePokerHands;
+import org.example.model.enumshand.Combination;
 import org.example.model.PokerHand;
 import org.junit.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.*;
+import java.util.stream.Stream;
+
+import static constants.PokerHandConstants.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
+@ExtendWith(MockitoExtension.class)
 public class SortPokerHandTest {
     @Test
-    public void tesGetRankPokerHand() {
+    public void tesSortPokerHand() {
         List<PokerHand> expectedHands = new ArrayList<>();
         expectedHands.add(new PokerHand("6S 7S 8S 9S TS"));    // 9
         expectedHands.add(new PokerHand("7H 5S 7D 7D 7S"));    // 8
@@ -47,5 +55,25 @@ public class SortPokerHandTest {
             assertEquals(ScorePokerHands.getRankPokerHand(hand.getCards()),
                     ScorePokerHands.getRankPokerHand(expectedHand.getCards()));
         }
+    }
+
+    @ParameterizedTest
+    @MethodSource("provideParamsForTests")
+    public void testGetRankPokerHand(PokerHand hand, Combination combination) {
+        Combination result = ScorePokerHands.getRankPokerHand(hand.getCards());
+        assertEquals(combination, result);
+    }
+
+    public static Stream<Arguments> provideParamsForTests() {
+        return Stream.of(
+                Arguments.of(PAIR_TEST, Combination.PAIR),
+                Arguments.of(TWO_PAIR_TEST, Combination.TWO_PAIR),
+                Arguments.of(TRIPS_TEST, Combination.TRIPS),
+                Arguments.of(QUADS_TEST, Combination.QUADS),
+                Arguments.of(STRAIGHT_TEST, Combination.STRAIGHT),
+                Arguments.of(FLASH_TEST, Combination.FLASH),
+                Arguments.of(FULL_HOUSE_TEST, Combination.FULL_HOUSE),
+                Arguments.of(STRAIGHT_FLASH_TEST, Combination.STRAIGHT_FLASH)
+        );
     }
 }

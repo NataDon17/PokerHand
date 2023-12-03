@@ -7,6 +7,6 @@ import java.util.List;
 public class PairDefinitionService implements CombinationsDefinable {
     @Override
     public boolean hasCombination(List<String> cards) {
-        return (cardCountMap(cards).values().stream().anyMatch(count -> count == 2));
+        return cardRateCountMap(cards).entrySet().stream().anyMatch(entry -> entry.getValue() == 2);
     }
 }
