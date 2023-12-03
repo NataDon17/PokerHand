@@ -1,6 +1,7 @@
 package org.example.model;
 
 import org.example.matcher.HandFactory;
+import org.example.model.enumshand.Combination;
 
 import java.util.List;
 
@@ -13,13 +14,13 @@ public class PokerHand implements Comparable<PokerHand> {
 
     public PokerHand(String hand) {
         this.hand = hand;
-        cards= HandFactory.getCards(hand);
-        combination=getRankPokerHand(cards);
+        cards = HandFactory.getCards(hand);
+        combination = getRankPokerHand(cards);
     }
+
     public List<String> getCards() {
         return cards;
     }
-
 
     @Override
     public String toString() {

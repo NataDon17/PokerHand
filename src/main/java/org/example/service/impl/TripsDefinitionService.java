@@ -7,6 +7,6 @@ import java.util.List;
 public class TripsDefinitionService implements CombinationsDefinable {
     @Override
     public boolean hasCombination(List<String> cards) {
-        return (cardCountMap(cards).values().stream().anyMatch(count -> count == 3));
+        return cardRateCountMap(cards).entrySet().stream().anyMatch(entry -> entry.getValue() == 3);
     }
 }

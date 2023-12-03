@@ -1,14 +1,12 @@
 package service;
 
-import org.example.constant.ConstantMethods;
-import org.example.model.PokerHand;
+import org.example.model.enumshand.CardRate;
+import org.example.model.enumshand.CardSuit;
 import org.example.service.CombinationsDefinable;
 import org.example.service.impl.*;
 import org.junit.Test;
 
 import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static constants.PokerHandConstants.*;
@@ -16,7 +14,6 @@ import static org.junit.Assert.*;
 
 public class CombinationsDefinableTest {
 
-    private final CombinationsDefinable highestCard = new HighestCardDefinitionService();
     private final CombinationsDefinable pair = new PairDefinitionService();
     private final CombinationsDefinable twoPair = new TwoPairsDefinitionService();
     private final CombinationsDefinable trips = new TripsDefinitionService();
@@ -27,27 +24,14 @@ public class CombinationsDefinableTest {
     private final CombinationsDefinable straightFlush = new StraightFlushDefinitionService((StraightDefinitionService) straight, (FlashDefinitionService) flash);
 
     @Test
-    public void testHasHighestCard() {
-        PokerHand testHand = new PokerHand("JC QC AC TC KC");
-
-        boolean result = highestCard.hasCombination(HIGHEST_CARD_TEST.getCards());
-        assertTrue(result);
-
-        Optional<String> expected = Optional.of("A");
-        Optional<String> resultString = testHand.getCards().stream().map(card -> card.substring(0, 1))
-                .max(Comparator.comparingInt(ConstantMethods::getCardValue));
-
-        assertEquals(expected, resultString);
-    }
-
-    @Test
     public void testPair() {
-        Map<String, Long> expectedMap = Map.of(
-                "2", 1L,
-                "3", 1L,
-                "T", 1L,
-                "K", 2L);
-        Map<String, Long> resultMap = pair.cardCountMap(PAIR_TEST.getCards());
+        Map<CardRate, Long> expectedMap = Map.of(
+                CardRate.FIVE, 1L,
+                CardRate.FOUR, 1L,
+                CardRate.TEN, 1L,
+                CardRate.KING, 2L
+        );
+        Map<CardRate, Long> resultMap = pair.cardRateCountMap(PAIR_TEST.getCards());
 
         assertEquals(expectedMap, resultMap);
 
@@ -59,11 +43,12 @@ public class CombinationsDefinableTest {
 
     @Test
     public void testTwoPairs() {
-        Map<String, Long> expectedMap = Map.of(
-                "2", 2L,
-                "K", 2L,
-                "T", 1L);
-        Map<String, Long> resultMap = twoPair.cardCountMap(TWO_PAIR_TEST.getCards());
+        Map<CardRate, Long> expectedMap = Map.of(
+                CardRate.TEN, 1L,
+                CardRate.FOUR, 2L,
+                CardRate.KING, 2L
+        );
+        Map<CardRate, Long> resultMap = twoPair.cardRateCountMap(TWO_PAIR_TEST.getCards());
 
         assertEquals(expectedMap, resultMap);
 
@@ -76,11 +61,13 @@ public class CombinationsDefinableTest {
 
     @Test
     public void testTrips() {
-        Map<String, Long> expectedMap = Map.of(
-                "2", 3L,
-                "K", 1L,
-                "T", 1L);
-        Map<String, Long> resultMap = trips.cardCountMap(TRIPS_TEST.getCards());
+        Map<CardRate, Long> expectedMap = Map.of(
+                CardRate.KING, 1L,
+                CardRate.FOUR, 3L,
+                CardRate.TEN, 1L
+        );
+        Map<CardRate, Long> resultMap = trips.cardRateCountMap(TRIPS_TEST.getCards());
+
         assertEquals(expectedMap, resultMap);
 
         boolean result = trips.hasCombination(TRIPS_TEST.getCards());
@@ -92,10 +79,12 @@ public class CombinationsDefinableTest {
 
     @Test
     public void testQuads() {
-        Map<String, Long> expectedMap = Map.of(
-                "2", 4L,
-                "T", 1L);
-        Map<String, Long> resultMap = quads.cardCountMap(QUADS_TEST.getCards());
+        Map<CardRate, Long> expectedMap = Map.of(
+                CardRate.TEN, 1L,
+                CardRate.FOUR, 4L
+        );
+        Map<CardRate, Long> resultMap = quads.cardRateCountMap(QUADS_TEST.getCards());
+
         assertEquals(expectedMap, resultMap);
 
         boolean result = quads.hasCombination(QUADS_TEST.getCards());
@@ -107,17 +96,15 @@ public class CombinationsDefinableTest {
 
     @Test
     public void testStraight() {
-        List<Integer> expected = List.of(0, 1, 2, 3);
-
-        List<Integer> var = STRAIGHT_TEST.getCards().stream()
-                .map(card -> ConstantMethods.getCardValue(card.substring(0, 1)))
+        List<Integer> expectedList = List.of(0, 1, 2, 3);
+        List<CardRate> sort = straight.cardRateCountMap(STRAIGHT_TEST.getCards()).keySet().stream()
                 .sorted()
                 .toList();
-
-        List<Integer> resultList = IntStream.range(0, var.size() - 1)
-                .filter(i -> var.get(i + 1) - var.get(i) == 1)
+        List<Integer> resultList = IntStream.range(0, sort.size() - 1)
+                .filter(i -> sort.get(i + 1).ordinal() - sort.get(i).ordinal() == 1)
                 .boxed().toList();
-        assertEquals(expected, resultList);
+
+        assertEquals(expectedList, resultList);
 
         boolean result = straight.hasCombination(STRAIGHT_TEST.getCards());
         boolean result1 = straight.hasCombination(HIGHEST_CARD_TEST.getCards());
@@ -128,14 +115,9 @@ public class CombinationsDefinableTest {
 
     @Test
     public void testFlash() {
-        Map<String, Long> expectedMap = Map.of(
-                "DIAMONDS", 5L);
-        Map<String, Long> resultMap = FLASH_TEST.getCards().stream()
-                .map(card -> ConstantMethods.getCardSuit(card.substring(1)))
-                .collect(Collectors.groupingBy(
-                        Function.identity(),
-                        Collectors.counting())
-                );
+        Map<CardSuit, Long> expectedMap = Map.of(
+                CardSuit.D, 5L);
+        Map<CardSuit, Long> resultMap = flash.cardSuitCountMap(FLASH_TEST.getCards());
         assertEquals(expectedMap, resultMap);
 
         boolean result = flash.hasCombination(FLASH_TEST.getCards());

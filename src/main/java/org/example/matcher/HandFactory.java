@@ -1,27 +1,25 @@
 package org.example.matcher;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Pattern;
 
 public class HandFactory {
-    private static final String validPattern = "[23456789TJQKASHDC]+";
+    private static final Pattern validPattern = Pattern.compile("[\\s23456789TJQKASHDC]+");
     private static final String spaceMatches = "\\s";
 
     public static List<String> getCards(String hand) {
-        String[] cardArray = hand.split(spaceMatches);
+        String[] cardArray = getValidString(hand).split(spaceMatches);
         List<String> cards = new ArrayList<>();
-        if (isValidCardArray(cardArray)) {
-            Collections.addAll(cards, cardArray);
-        } else {
-            throw new NumberFormatException("Only these values are allowed for a poker hand: " + validPattern);
+        Collections.addAll(cards, cardArray);
+        if (cards.size() != 5) {
+            throw new IllegalArgumentException("Invalid number of cards in hand");
         }
         return cards;
     }
-
-    private static boolean isValidCardArray(String[] cardArray) {
-        return Arrays.stream(cardArray).allMatch(card -> Pattern.matches(validPattern, card));
+    private static String getValidString(String s) {
+        return Optional.of(s)
+                .filter(validPattern.asMatchPredicate())
+                .map(match -> s)
+                .orElseThrow(() -> new NumberFormatException("Only these values are allowed for a poker hand: " + validPattern));
     }
 }

@@ -1,4 +1,4 @@
-package org.example.model;
+package org.example.model.enumshand;
 
 public enum Combination {
     HIGHEST_CARD(1),
@@ -9,8 +9,7 @@ public enum Combination {
     FLASH(6),
     FULL_HOUSE(7),
     QUADS(8),
-    STRAIGHT_FLASH(9),
-    NON_COMBINATION(0);
+    STRAIGHT_FLASH(9);
     private final int rank;
 
     Combination(int rank) {
